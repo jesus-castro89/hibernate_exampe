@@ -22,7 +22,7 @@ public class App {
      */
     private static void createDatabaseIfNotExists(String dbName) {
         String url = "jdbc:mariadb://localhost:3306/";  // Sin base de datos
-        String user = "tu_usuario";
+        String user = "root";
         String password = "";
 
         try (Connection conn = DriverManager.getConnection(url, user, password)) {

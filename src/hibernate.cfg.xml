@@ -4,12 +4,28 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url"/>
-    <property name="connection.driver_class"/>
-    <!-- <property name="connection.username"/> -->
-    <!-- <property name="connection.password"/> -->
+    <!-- Configuración de conexión a BD: MariaDB -->
+    <property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mariadb://localhost:3306/hibernate_db</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password" />
 
-    <!-- DB schema will be updated if needed -->
-    <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
+    <!-- Configuración de dialecto -->
+    <property name="hibernate.dialect">org.hibernate.dialect.MariaDBDialect</property>
+
+    <!-- Configuración de consultas en consola -->
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.format_sql">true</property>
+
+    <!-- Configuración del esquema de la base de datos -->
+    <property name="hibernate.hbm2ddl.auto">update</property>
+
+    <!-- Mapeo de clases -->
+    <mapping class="org.app.entities.Person" />
+    <mapping class="org.app.entities.Student" />
+    <mapping class="org.app.entities.Professor" />
+    <mapping class="org.app.entities.Course" />
+    <mapping class="org.app.entities.Enrollment" />
+    <mapping class="org.app.entities.CourseProfessor" />
   </session-factory>
 </hibernate-configuration>
