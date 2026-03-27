@@ -37,4 +37,44 @@ public class Student {
     @OneToMany(mappedBy = "student",
             cascade = CascadeType.ALL)
     private ArrayList<Enrollment> enrollments;
+
+    public UUID getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(UUID personId) {
+        this.personId = personId;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
+
+    public LocalDate getEnrollmentDate() {
+        return enrollmentDate;
+    }
+
+    public void setEnrollmentDate(LocalDate enrollmentDate) {
+        this.enrollmentDate = enrollmentDate;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public ArrayList<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(ArrayList<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
 }
