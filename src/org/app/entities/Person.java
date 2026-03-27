@@ -1,8 +1,8 @@
 package org.app.entities;
 
 import jakarta.persistence.*;
-import org.app.util.HibernateUtil;
-import org.hibernate.SessionFactory;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 
 import java.util.UUID;
 
@@ -18,21 +18,26 @@ import java.util.UUID;
 public class Person {
 
     @Id
-    @Column(nullable = false, columnDefinition = "UUID")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition = "UUID",
+            nullable = false,
+            updatable = false,
+            insertable = false)
     private UUID id;
 
-    /**
-     * Columna Auxiliar para búsquedas, etc.
-     * NOTA: En producción debemos marcar la columna como
-     * AUTO_INCREMENT posterior o la ejecución inicial para mantener consistencia.
-     */
-    @Column(name = "person_id", unique = true)
+    @Column(name = "person_id",
+            unique = true,
+            insertable = false,
+            updatable = false)
+    @Generated(event = EventType.INSERT)
     private Long personId;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name",
+            nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name",
+            nullable = false)
     private String lastName;
 
     @Column(nullable = false,
@@ -42,30 +47,21 @@ public class Person {
     private String email;
 
     @Column(check = {
-            @CheckConstraint(name = "chk_age_range", constraint = "age BETWEEN 0 AND 120")
+            @CheckConstraint(name = "chk_age_range",
+                    constraint = "age BETWEEN 0 AND 120")
     })
     private Integer age;
 
     // Relaciones
     @OneToOne(mappedBy = "person",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL,
+            optional = true)
     private Student student;
 
-    @PostPersist
-    public void postPersist() {
-
-        SessionFactory factory = HibernateUtil.getSessionFactory();
-        Person persistedPerson;
-        try (var session = factory.openSession()) {
-
-            session.beginTransaction();
-            persistedPerson = session.find(Person.class, this.id);
-            session.getTransaction().commit();
-            this.personId = persistedPerson.getPersonId();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    @OneToOne(mappedBy = "person",
+            cascade = CascadeType.ALL,
+            optional = true)
+    private Professor teacher;
 
     public UUID getId() {
         return id;
@@ -119,7 +115,7 @@ public class Person {
         return student;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public Professor getTeacher() {
+        return teacher;
     }
 }

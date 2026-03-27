@@ -29,6 +29,11 @@ public class Professor {
     private int hours;
 
     //Relaciones
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private Person person;
+
     @OneToMany(mappedBy = "professor",
             cascade = CascadeType.ALL)
     private ArrayList<CourseProfessor> courseProfessors;

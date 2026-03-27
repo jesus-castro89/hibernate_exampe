@@ -15,11 +15,6 @@ public class Student {
             columnDefinition = "UUID")
     private UUID personId;
 
-    /**
-     * Columna Auxiliar para búsquedas, etc.
-     * NOTA: En producción debemos marcar la columna como
-     * AUTO_INCREMENT posterior o la ejecución inicial para mantener consistencia.
-     */
     @Column(name = "student_id",
             unique = true)
     private Long studentId;

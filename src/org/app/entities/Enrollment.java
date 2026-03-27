@@ -20,6 +20,13 @@ public class Enrollment {
     @Column(name = "enrollment_id", unique = true)
     private Long enrollmentId;
 
+    @Column(name = "grade",
+            length = 3,
+            check =
+            @CheckConstraint(name = "chk_grade",
+                    constraint = "grade >= 0 AND grade <= 100"))
+    private Integer grade;
+
     // Relaciones
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "student_id", nullable = false)
@@ -28,4 +35,44 @@ public class Enrollment {
     @ManyToOne
     @JoinColumn(name = "course_id", referencedColumnName = "course_id", nullable = false)
     private Course course;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Long getEnrollmentId() {
+        return enrollmentId;
+    }
+
+    public void setEnrollmentId(Long enrollmentId) {
+        this.enrollmentId = enrollmentId;
+    }
+
+    public Integer getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Integer grade) {
+        this.grade = grade;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 }

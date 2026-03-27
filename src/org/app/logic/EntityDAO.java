@@ -1,5 +1,6 @@
 package org.app.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -11,6 +12,8 @@ public interface EntityDAO<T> {
     T update(T entity);
 
     void delete(T entity);
+
+    ArrayList<T> findAll();
 
     /**
      * Función de búsqueda de un contenido especifíco para un campo

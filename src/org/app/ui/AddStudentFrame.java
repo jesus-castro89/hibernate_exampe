@@ -1,15 +1,17 @@
 package org.app.ui;
 
+import com.github.lgooddatepicker.components.DatePicker;
+
 import javax.swing.*;
 
 public class AddStudentFrame extends JDialog {
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
-    private JButton button1;
-    private JButton button2;
+    private JTextField nameField;
+    private JTextField lastNameField;
+    private JTextField emailField;
+    private JButton agregarButton;
+    private JButton cancelarButton;
     private JPanel mainPanel;
+    private JPanel dateField;
 
     public AddStudentFrame(JFrame parent) {
         super(parent, true);
@@ -25,5 +27,9 @@ public class AddStudentFrame extends JDialog {
         setAlwaysOnTop(true);
         pack();
         setLocationRelativeTo(getParent());
+    }
+
+    private void createUIComponents() {
+        dateField = new DatePicker();
     }
 }
