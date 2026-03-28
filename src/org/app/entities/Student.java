@@ -33,6 +33,19 @@ public class Student {
             cascade = CascadeType.ALL)
     private ArrayList<Enrollment> enrollments;
 
+    @Override
+    public String toString() {
+        return "Nombre: %s %s, Edad: %d, Email: %s, Fecha de Inscripción: %s".formatted(
+                person.getFirstName(),
+                person.getLastName(),
+                person.getAge(),
+                person.getEmail(),
+                enrollmentDate
+        );
+    }
+
+    //
+
     public UUID getPersonId() {
         return personId;
     }

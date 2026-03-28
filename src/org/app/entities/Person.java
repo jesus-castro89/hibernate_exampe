@@ -1,9 +1,12 @@
 package org.app.entities;
 
 import jakarta.persistence.*;
+import org.app.util.App;
 import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.processing.Find;
 import org.hibernate.generator.EventType;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -62,6 +65,13 @@ public class Person {
             cascade = CascadeType.ALL,
             optional = true)
     private Professor teacher;
+
+    @Override
+    public String toString() {
+        return "Nombre: %s %s, Email: %s, Edad: %d".formatted(firstName, lastName, email, age);
+    }
+
+    // Getters & Setters
 
     public UUID getId() {
         return id;

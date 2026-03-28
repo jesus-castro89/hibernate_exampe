@@ -1,20 +1,32 @@
 package org.app.logic;
 
 import org.app.entities.Student;
+import org.app.repositories.StudentRepository;
+import org.app.repositories.StudentRepository_;
+import org.app.util.App;
 import org.app.util.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class StudentDAO implements EntityDAO<Student> {
 
+    private final StudentRepository repo;
+
+    public StudentDAO(Session session) {
+        this.repo = new StudentRepository_(App.getInstance().getSession());
+    }
+
     @Override
     public Student create(Student entity) {
-        return null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.persist(entity);
+        session.getTransaction().commit();
+        session.close();
+        return entity;
     }
 
     @Override
@@ -28,20 +40,8 @@ public class StudentDAO implements EntityDAO<Student> {
     }
 
     @Override
-    public ArrayList<Student> findAll() {
-        SessionFactory factory = HibernateUtil.getSessionFactory();
-        Session session = factory.openSession();
-        session.beginTransaction();
-        // Recuperamos todos los estudiantes con su información de persona asociada
-        List<Student> students;
-        students = session.createNativeQuery(
-                "SELECT s.* " +
-                        "FROM student s " +
-                        "JOIN person p ON s.id = p.id", Student.class)
-                .getResultList();
-        session.getTransaction().commit();
-        session.close();
-        return new ArrayList<>(students);
+    public List<Student> findAll() {
+        return repo.findAll();
     }
 
     @Override

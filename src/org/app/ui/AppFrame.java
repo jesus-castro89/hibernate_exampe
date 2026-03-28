@@ -48,12 +48,12 @@ public class AppFrame extends JFrame {
 
     private void updateTableModel() {
 
-        ArrayList<Student> students;
-        StudentDAO studentDAO = new StudentDAO();
-        students = studentDAO.findAll();
-        IO.println("Students: " + students.size());
-        StudentTableModel studentTableModel = new StudentTableModel(students);
-        studenTable.setModel(studentTableModel);
+//        ArrayList<Student> students;
+//        StudentDAO studentDAO = new StudentDAO();
+//        students = studentDAO.findAll();
+//        IO.println("Students: " + students.size());
+//        StudentTableModel studentTableModel = new StudentTableModel(students);
+//        studenTable.setModel(studentTableModel);
     }
 
     void main() {
