@@ -19,6 +19,7 @@
       <sourceFolder url="file://$MODULE_DIR$/generated" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/annotations/org/app/repositories" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -28,5 +29,6 @@
     <orderEntry type="library" name="apache.logging.log4j.core" level="project" />
     <orderEntry type="library" name="github.lgooddatepicker.LGoodDatePicker" level="project" />
     <orderEntry type="library" name="hibernate.orm.processor" level="project" />
+    <orderEntry type="library" name="apache.xmlgraphics.batik.all" level="project" />
   </component>
 </module>

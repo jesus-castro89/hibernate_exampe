@@ -6,10 +6,11 @@ import org.app.entities.Student;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import java.util.List;
 
 public class StudentTableModel extends AbstractTableModel {
 
-    private ArrayList<Student> students;
+    private List<Student> students;
     private String[] columnNames = new String[]{"ID", "Nombre",
             "Apellido", "E-mail", "Fecha de Inscripción"};
 
@@ -17,8 +18,12 @@ public class StudentTableModel extends AbstractTableModel {
         students = new ArrayList<>();
     }
 
-    public StudentTableModel(ArrayList<Student> students) {
+    public StudentTableModel(List<Student> students) {
         this.students = students;
+    }
+
+    public void addStudent(Student student) {
+        students.add(student);
     }
 
     @Override

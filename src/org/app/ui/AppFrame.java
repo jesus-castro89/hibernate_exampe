@@ -1,41 +1,40 @@
 package org.app.ui;
 
+import org.app.entities.Person;
 import org.app.entities.Student;
-import org.app.logic.StudentDAO;
 import org.app.ui.tablemodel.StudentTableModel;
-import org.app.util.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.app.ui.theme.components.ThemeButton;
+import org.app.ui.theme.ThemeManager;
+import org.app.ui.theme.Themes;
+import org.app.ui.theme.components.ThemeTabbedPane;
+import org.app.ui.theme.components.ThemeTable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Statement;
-import java.util.ArrayList;
+import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.util.Objects;
 
 public class AppFrame extends JFrame {
 
     private JTabbedPane tabbedPane1;
     private JPanel mainPanel;
-    private JButton agregarAlumnoButton;
+    private JButton addStudentBtn;
     private JTextField textField1;
-    private JTable studenTable;
+    private JTable studentTable;
     private JButton button1;
-    private AddStudentFrame addStudentFrame;
+    private JButton searchButton;
+    private final AddStudentFrame addStudentFrame;
 
     public AppFrame() {
         initComponents();
-        agregarAlumnoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addStudentFrame.setVisible(true);
-            }
-        });
+        addStudentFrame = new AddStudentFrame(this);
+        addStudentBtn.addActionListener(e -> addStudentFrame.setVisible(true));
     }
 
     private void initComponents() {
-        addStudentFrame = new AddStudentFrame(this);
+
         setContentPane(mainPanel);
         setTitle("My Application");
         setSize(1200, 800);
@@ -43,30 +42,27 @@ public class AppFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the frame on the screen
         setVisible(true);
-
+        StudentTableModel model = (StudentTableModel) studentTable.getModel();
+        Student student = new Student();
+        student.setStudentId(1L);
+        student.setEnrollmentDate(LocalDate.of(2026, 1, 1));
+        Person person = new Person();
+        person.setAge(20);
+        person.setFirstName("John");
+        person.setLastName("Doe");
+        student.setPerson(person);
+        model.addStudent(student);
+        model.addStudent(student);
     }
 
-    private void updateTableModel() {
+    private void createUIComponents() throws URISyntaxException {
 
-//        ArrayList<Student> students;
-//        StudentDAO studentDAO = new StudentDAO();
-//        students = studentDAO.findAll();
-//        IO.println("Students: " + students.size());
-//        StudentTableModel studentTableModel = new StudentTableModel(students);
-//        studenTable.setModel(studentTableModel);
-    }
-
-    void main() {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new AppFrame();
-            }
-        });
-    }
-
-    private void createUIComponents() {
+        ThemeManager.applyTheme(Themes.LIGHT);
         StudentTableModel studentTableModel = new StudentTableModel();
-        studenTable = new JTable(studentTableModel);
+        ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/search.png")));
+        studentTable = new ThemeTable(studentTableModel);
+        addStudentBtn = new ThemeButton();
+        searchButton = new ThemeButton(icon);
+        tabbedPane1 = new ThemeTabbedPane();
     }
 }
