@@ -1,11 +1,14 @@
 package org.app.logic;
 
 import org.app.entities.Student;
+import org.app.entities.Student_;
 import org.app.repositories.StudentRepository;
 import org.app.repositories.StudentRepository_;
 import org.app.util.App;
 import org.app.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.query.Order;
+import org.hibernate.query.SortDirection;
 
 import javax.swing.*;
 import java.util.List;
@@ -15,7 +18,7 @@ public class StudentDAO implements EntityDAO<Student> {
 
     private final StudentRepository repo;
 
-    public StudentDAO(Session session) {
+    public StudentDAO() {
         this.repo = new StudentRepository_(App.getInstance().getSession());
     }
 
@@ -41,7 +44,7 @@ public class StudentDAO implements EntityDAO<Student> {
 
     @Override
     public List<Student> findAll() {
-        return repo.findAll();
+        return repo.findAll(Order.asc(Student_.studentId));
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.app.entities;
 
 import jakarta.annotation.Generated;
 import jakarta.persistence.metamodel.EntityType;
+import jakarta.persistence.metamodel.ListAttribute;
 import jakarta.persistence.metamodel.SingularAttribute;
 import jakarta.persistence.metamodel.StaticMetamodel;
 import java.time.LocalDate;
@@ -34,6 +35,11 @@ public abstract class Student_ {
 	 * @see #person
 	 **/
 	public static final String PERSON = "person";
+	
+	/**
+	 * @see #enrollments
+	 **/
+	public static final String ENROLLMENTS = "enrollments";
 
 	
 	/**
@@ -60,6 +66,11 @@ public abstract class Student_ {
 	 * Static metamodel for attribute {@link org.app.entities.Student#person}
 	 **/
 	public static volatile SingularAttribute<Student, Person> person;
+	
+	/**
+	 * Static metamodel for attribute {@link org.app.entities.Student#enrollments}
+	 **/
+	public static volatile ListAttribute<Student, Enrollment> enrollments;
 
 }
 

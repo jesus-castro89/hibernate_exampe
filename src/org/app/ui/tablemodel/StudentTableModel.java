@@ -26,6 +26,10 @@ public class StudentTableModel extends AbstractTableModel {
         students.add(student);
     }
 
+    public void clearStudents() {
+        students.clear();
+    }
+
     @Override
     public int getRowCount() {
         return students.size();

@@ -11,34 +11,32 @@ public class ThemeManager {
 
     public static void applyTheme(Theme theme) {
 
-        UIManager.put("Panel.background", theme.primary.brighter());
-        UIManager.put("Frame.background", theme.background);
+        UIManager.put("Panel.background", theme.primary);
 
         UIManager.put("Button.background", theme.primary);
         UIManager.put("Button.foreground", theme.background);
         UIManager.put("Button.font", theme.font.deriveFont(Font.BOLD));
 
-        UIManager.put("TabbedPane.selected", theme.primary);
-        UIManager.put("TabbedPane.foreground", theme.background);
-        UIManager.put("TabbedPane.font", theme.font);
-
         UIManager.put("Label.foreground", theme.text);
         UIManager.put("Label.font", theme.font);
 
+        UIManager.put("TabbedPane.selected", theme.primary);
+        UIManager.put("TabbedPane.focus", theme.primary);
         UIManager.put("TabbedPane.foreground", theme.background);
+        UIManager.put("TabbedPane.font", theme.font);
         UIManager.put("TabbedPane.background", theme.primary.darker());
         UIManager.put("TabbedPane.selected", theme.primary);
         UIManager.put("TabbedPane.tabAreaBackground", theme.background);
         UIManager.put("TabbedPane.darkShadow", theme.primary.darker());
-        UIManager.put("TabbedPane.highlight", theme.primary);
-        UIManager.put("TabbedPane.tabAreaBackground", theme.background);
-        UIManager.put("TabbedPane.borderHightlightColor", theme.primary.darker());
+        UIManager.put("TabbedPane.highlight", theme.primary.darker().darker());
+        UIManager.put("TabbedPane.borderHightlightColor", theme.primary.darker().darker());
         UIManager.put("TabbedPane.tabsOpaque", true);
         UIManager.put("TabbedPane.tabInsets", new Insets(5, 5, 5, 5));
         UIManager.put("TabbedPane.contentBorderInsets", new Insets(5, 5, 5, 5));
         UIManager.put("TabbedPane.font", theme.font.deriveFont(Font.BOLD));
 
         UIManager.put("TextField.background", theme.background);
+        UIManager.put("TextField.highlight", theme.primary);
         UIManager.put("TextField.foreground", theme.text);
         UIManager.put("TextField.font", theme.font);
         UIManager.put("TextField.margin", new Insets(5, 1, 5, 1));

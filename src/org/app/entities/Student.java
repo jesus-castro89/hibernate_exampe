@@ -3,7 +3,7 @@ package org.app.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -31,7 +31,7 @@ public class Student {
 
     @OneToMany(mappedBy = "student",
             cascade = CascadeType.ALL)
-    private ArrayList<Enrollment> enrollments;
+    private List<Enrollment> enrollments;
 
     @Override
     public String toString() {
@@ -78,11 +78,11 @@ public class Student {
         this.person = person;
     }
 
-    public ArrayList<Enrollment> getEnrollments() {
+    public List<Enrollment> getEnrollments() {
         return enrollments;
     }
 
-    public void setEnrollments(ArrayList<Enrollment> enrollments) {
+    public void setEnrollments(List<Enrollment> enrollments) {
         this.enrollments = enrollments;
     }
 }
