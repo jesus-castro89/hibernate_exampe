@@ -7,16 +7,20 @@ import java.awt.*;
 public class ThemeLabelUI extends BasicLabelUI {
 
     @Override
-    public void installUI(JComponent c) {
-
-        c.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    protected void installDefaults(JLabel c) {
+        super.installDefaults(c);
+        c.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        c.setAlignmentX(Component.LEFT_ALIGNMENT);
     }
 
     @Override
-    public Dimension getPreferredSize(JComponent c) {
-        Dimension size = super.getPreferredSize(c);
-        size.width += 20;
-        size.height += 20;
-        return size;
+    protected void paintEnabledText(JLabel l, Graphics g, String s, int textX, int textY) {
+
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setColor(l.getForeground());
+        g2d.setFont(l.getFont());
+        g2d.drawString(s, textX, textY);
     }
 }

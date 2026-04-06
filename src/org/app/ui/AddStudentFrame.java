@@ -6,24 +6,25 @@ import org.app.entities.Student;
 import org.app.logic.StudentDAO;
 import org.app.ui.theme.components.ThemeButton;
 import org.app.ui.theme.components.ThemeInput;
+import org.app.ui.theme.components.ThemeInputPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.function.Predicate;
 
 public class AddStudentFrame extends JDialog {
-    private JTextField nameField;
-    private JTextField lastNameField;
-    private JTextField emailField;
+
     private JButton addButton;
     private JButton cancelButton;
     private JPanel mainPanel;
     private JPanel dateField;
+    private JPanel nameField;
+    private JPanel lastNameField;
+    private JPanel emailField;
 
     public AddStudentFrame(JFrame parent) {
+
         super(parent, true);
         initComponents();
         addButton.addActionListener(e -> addStudent());
@@ -31,38 +32,39 @@ public class AddStudentFrame extends JDialog {
     }
 
     private void addStudent() {
-        IO.println("Adding student...");
-        Predicate<String> isEmpty = String::isEmpty;
-        Predicate<String> isEmail = s -> s.matches("^[A-Za-z0-9+_.-]+@(.+)$");
+
         Predicate<LocalDate> isDate = o -> o != null && o.isBefore(LocalDate.now());
-        String name = nameField.getText();
-        String lastName = lastNameField.getText();
-        String email = emailField.getText();
+        String name = "";
+        String lastName = "";
+        String email = "";
         LocalDate dob = ((DatePicker) dateField).getDate();
-        String error = "";
-        if (isEmpty.test(name)) {
-            ((ThemeInput) nameField).setErrorMessage("El nombre no puede estar vacío");
-            error += "El nombre no puede estar vacío\n";
-            nameField.revalidate();
-            nameField.repaint();
-        }
-        if (isEmpty.test(lastName)) {
-            ((ThemeInput) lastNameField).setErrorMessage("El nombre no puede estar vacío");
-            error += "El apellido no puede estar vacío\n";
-            lastNameField.revalidate();
-            lastNameField.repaint();
-        }
-        if (!isEmail.test(email)) {
-            ((ThemeInput) emailField).setErrorMessage("El correo no es válido");
-            error += "El correo no es válido\n";
-            emailField.revalidate();
-            emailField.repaint();
-        }
+        boolean error = false;
+        var inputPanel = ((ThemeInputPanel<String>) nameField);
+        inputPanel.validateInput();
+        if (inputPanel.isValidField())
+            name = inputPanel.getText();
+        else
+            error = true;
+
+        inputPanel = ((ThemeInputPanel<String>) lastNameField);
+        inputPanel.validateInput();
+        if (inputPanel.isValidField())
+            lastName = inputPanel.getText();
+        else
+            error = true;
+
+        inputPanel = ((ThemeInputPanel<String>) emailField);
+        inputPanel.validateInput();
+        if (inputPanel.isValidField())
+            email = inputPanel.getText();
+        else
+            error = true;
+
         if (!isDate.test(((DatePicker) dateField).getDate()))
-            error += "La fecha de inscripción debe ser previa a la actual\n";
-        if (!error.isEmpty()) {
-            JOptionPane.showMessageDialog(this, error);
-        } else {
+            error = true;
+
+        if (!error) {
+
             Person p = new Person();
             p.setFirstName(name);
             p.setLastName(lastName);
@@ -75,26 +77,39 @@ public class AddStudentFrame extends JDialog {
             ((AppFrame) getParent()).loadStudentTable();
             dispose();
         }
+        revalidate();
+        repaint();
     }
 
     private void initComponents() {
 
         setTitle("Add Student");
         setContentPane(mainPanel);
-        setResizable(false);
+        pack();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setAlwaysOnTop(true);
-        pack();
         setLocationRelativeTo(getParent());
         mainPanel.setBackground(new Color(0xc8ddf2));
     }
 
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        pack();
+    }
+
     private void createUIComponents() {
+
+        Predicate<String> isEmpty = s -> !s.isEmpty() && s.matches("^[A-Za-záéíóúñÁÉÍÓÚÑ]+$");
+        Predicate<String> isEmail = s -> s.matches("^[A-Za-z0-9+_.-]+@(.+)$");
         dateField = new DatePicker();
         addButton = new ThemeButton();
         cancelButton = new ThemeButton();
-        nameField = new ThemeInput();
-        lastNameField = new ThemeInput();
-        emailField = new ThemeInput();
+        nameField = new ThemeInputPanel<>("Nombre", "Juan...",
+                "El nombre no puede estar vacío", isEmpty, this);
+        lastNameField = new ThemeInputPanel<>("Apellido", "Pérez...",
+                "El apellido no puede estar vacío", isEmpty, this);
+        emailField = new ThemeInputPanel<>("Correo electrónico", "correo@dominio.com",
+                "El formato de correo es invalido", isEmail, this);
     }
 }

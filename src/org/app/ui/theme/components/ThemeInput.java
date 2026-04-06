@@ -8,46 +8,70 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.function.Predicate;
 
-public class ThemeInput extends JTextField {
+public class ThemeInput<T> extends JTextField {
+
+    private String fieldName;
     private String hintText;          // Texto de la etiqueta flotante
     private String errorMessage;      // Mensaje de error (si hay)
     private boolean isFocused = false;
     private Color normalColor;
     private Color errorColor;
+    private final Predicate<T> validator;
+    private ThemeInputPanel<T> parentPanel;
 
-    // Animación de la etiqueta (opcional)
-    private float labelAnimation = 0f; // 0 = abajo, 1 = arriba
-    private Timer animationTimer;
-
-    public ThemeInput() {
-        this("", "");
-    }
-
-    public ThemeInput(String hintText, String errorMessage) {
+    public ThemeInput(String fieldName, String hintText, String errorMessage, Predicate<T> validator) {
 
         setUI(new ThemeInputUI());
+        this.fieldName = fieldName;
+        this.validator = validator;
         this.hintText = hintText;
         this.errorMessage = errorMessage;
         normalColor = UIManager.getColor("TextField.highlight");
         errorColor = Color.RED;
+        rebuildBorder(normalColor);
+
+        FocusListener focusListener = new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                isFocused = true;
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                isFocused = false;
+            }
+        };
+        addFocusListener(focusListener);
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setParentPanel(ThemeInputPanel<T> parentPanel) {
+        this.parentPanel = parentPanel;
+    }
+
+    public boolean isValidField() {
+
+        if (!validator.test((T) getText())) {
+            rebuildBorder(errorColor);
+            return false;
+        } else {
+            rebuildBorder(normalColor);
+            return true;
+        }
     }
 
     private void rebuildBorder(Color color) {
+
         LineBorder border = new RoundBorder(color, 3, true);
         EmptyBorder emptyBorder = new EmptyBorder(5, 10, 5, 10);
-        setBorder(new CompoundBorder(border, emptyBorder));
+        CompoundBorder compoundBorder = new CompoundBorder(border, emptyBorder);
+        TitledBorder titledBorder = new TitledBorder(compoundBorder, fieldName);
+        setBorder(titledBorder);
     }
 
     @Override
@@ -63,47 +87,20 @@ public class ThemeInput extends JTextField {
         g2.setColor(getBackground());
         g2.fillRoundRect(x, y, w, h, 12, 12);
         // Borde
-        if (errorMessage != null && !errorMessage.isEmpty()) {
-            rebuildBorder(errorColor);
-        } else {
-            rebuildBorder(normalColor);
-        }
         getBorder().paintBorder(this, g2, 0, 0, getWidth(), getHeight());
+        // Dibujamos el hint siempre que el campo esta vacio
+        if (!isFocused && getText().isEmpty()) {
+            g2.setColor(getForeground().brighter().brighter().brighter().brighter());
+            g2.setFont(getFont().deriveFont(Font.ITALIC));
+            g2.drawString(hintText, x + 10, y + h / 2 + g2.getFontMetrics().getAscent() / 2 - 2);
+        }
+        // Dibujamos el resto con la clase padre
         super.paintComponent(g2);
         // Pintar la etiqueta flotante
         g2.dispose();
     }
 
-    private void paintFloatingLabel(Graphics2D g2) {
-        if (hintText == null || hintText.isEmpty()) return;
-
-        // Color de la etiqueta: primario si está enfocado, gris si no, rojo si error
-        Color labelColor;
-        if (errorMessage != null && !errorMessage.isEmpty()) {
-            labelColor = Color.RED;
-        } else if (isFocused) {
-            labelColor = getBackground().brighter();
-        } else {
-            labelColor = Color.GRAY;
-        }
-        g2.setColor(labelColor);
-        g2.setFont(getFont());
-
-        // Calcular posición Y según si está flotando o no
-        float y = 0;
-        if (!(labelAnimation > 0.5f) && !isFocused && getText().isEmpty()) {
-            // Dentro del campo, centrado verticalmente
-            y = (float) (getHeight() + getFontMetrics(getFont()).getAscent()) / 2 - 2;
-            g2.drawString(hintText, 12, y);
-        } else {
-            TitledBorder titledBorder = BorderFactory.createTitledBorder(getBorder(), hintText);
-            setBorder(titledBorder);
-        }
-    }
-
-    private Color getBorderColor() {
-        if (errorMessage != null && !errorMessage.isEmpty()) return Color.RED;
-        if (isFocused) return UIManager.getColor("TextField.highlight").darker();
-        return UIManager.getColor("TextField.highlight").brighter();
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }

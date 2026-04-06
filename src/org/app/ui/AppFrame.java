@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Semaphore;
+import java.util.function.Predicate;
 
 public class AppFrame extends JFrame {
 
@@ -32,7 +33,7 @@ public class AppFrame extends JFrame {
     private JTextField textField1;
     private JButton editStudentBtn;
     private JButton deleteStudentBtn;
-    private final AddStudentFrame addStudentFrame;
+    private AddStudentFrame addStudentFrame;
     private final Semaphore dbSemaphore = new Semaphore(1, true);
     private List<Student> students;
     private StudentTableModel studentTableModel;
@@ -58,8 +59,10 @@ public class AppFrame extends JFrame {
         timer.start();
         initDataBaseConnection();
         loadStudentTable();
-        addStudentFrame = new AddStudentFrame(this);
-        addStudentBtn.addActionListener(e -> addStudentFrame.setVisible(true));
+        addStudentBtn.addActionListener(e -> {
+            addStudentFrame = new AddStudentFrame(this);
+            addStudentFrame.setVisible(true);
+        });
     }
 
     private void initComponents() {
@@ -116,7 +119,9 @@ public class AppFrame extends JFrame {
         deleteStudentBtn = new ThemeButton();
         searchButton = new ThemeButton(icon);
         tabbedPane1 = new ThemeTabbedPane();
-        searchField = new ThemeInput("Busqueda", "");
-        textField1 = new ThemeInput("Ejemplo", "");
+        Predicate<String> searchFieldFilter = s -> s.matches(".*");
+        Predicate<String> lastNameFilter = s -> s.matches(".*");
+        searchField = new ThemeInput<>("Busqueda", "Nombre...", "", searchFieldFilter);
+        textField1 = new ThemeInput<>("E","Ejemplo", "", lastNameFilter);
     }
 }
